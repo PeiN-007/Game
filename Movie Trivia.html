@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #121212; color: white; }
+        .question-box { margin: 20px; padding: 20px; border: 2px solid white; }
+        .answer-btn { margin: 5px; padding: 10px; cursor: pointer; background-color: #444; color: white; border: none; }
+        .answer-btn:hover { background-color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Movie & Series Trivia</h1>
+    <p id="progress"></p>
+    <div id="quiz-container"></div>
+    <p id="message"></p>
+    
+    <script>
+        const questions = [
+            { q: "What is the name of the spaceship in 'Alien'?", a: "Nostromo", options: ["Serenity", "Nostromo", "Event Horizon", "Discovery One"] },
+            { q: "Who directed 'Inception'?", a: "Christopher Nolan", options: ["Steven Spielberg", "Quentin Tarantino", "Christopher Nolan", "James Cameron"] },
+            { q: "Which TV show features the character Walter White?", a: "Breaking Bad", options: ["Breaking Bad", "Better Call Saul", "Sons of Anarchy", "Dexter"] },
+            { q: "In 'Stranger Things', what is Eleven's favorite food?", a: "Eggo Waffles", options: ["Pizza", "Burgers", "Eggo Waffles", "French Fries"] },
+            { q: "Which actor played Jack Sparrow in 'Pirates of the Caribbean'?", a: "Johnny Depp", options: ["Brad Pitt", "Johnny Depp", "Tom Hanks", "Robert Downey Jr."] },
+            { q: "What is the name of the AI in '2001: A Space Odyssey'?", a: "HAL 9000", options: ["JARVIS", "GLaDOS", "HAL 9000", "Skynet"] },
+            { q: "Which movie features the song 'Let It Go'?", a: "Frozen", options: ["Moana", "Frozen", "Tangled", "Brave"] },
+            { q: "Who is the main protagonist in 'The Witcher' series?", a: "Geralt of Rivia", options: ["Geralt of Rivia", "Yennefer", "Jaskier", "Ciri"] },
+            { q: "Which series is based on George R.R. Martin's books?", a: "Game of Thrones", options: ["Game of Thrones", "The Witcher", "Shadow and Bone", "His Dark Materials"] },
+            { q: "In 'The Matrix', what color pill does Neo take?", a: "Red", options: ["Blue", "Red", "Green", "Yellow"] }
+        ];
+
+        let shuffledQuestions = [];
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function startGame() {
+            shuffledQuestions = questions.sort(() => 0.5 - Math.random());
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            document.getElementById("message").innerText = "";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                window.location.href = "https://drive.google.com/file/d/1P3pCRpCiGViD0ORaegb7hzFMCxvJnyx6/view"; // Change to actual link
+                return;
+            }
+
+            document.getElementById("progress").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length} | Correct: ${correctAnswers}`;
+            const questionData = shuffledQuestions[currentQuestionIndex];
+            const quizContainer = document.getElementById("quiz-container");
+            quizContainer.innerHTML = `<div class='question-box'><p>${questionData.q}</p></div>`;
+            questionData.options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.innerText = option;
+                btn.className = "answer-btn";
+                btn.onclick = () => checkAnswer(option, questionData.a);
+                quizContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            if (selected === correct) {
+                correctAnswers++;
+                document.getElementById("message").innerText = "Correct!";
+                setTimeout(() => {
+                    document.getElementById("message").innerText = "";
+                    currentQuestionIndex++;
+                    showQuestion();
+                }, 1000);
+            } else {
+                document.getElementById("message").innerText = "WRONG";
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
